@@ -56,7 +56,7 @@ class ShellyCover(ShellyDevice, CoverDevice):
     def current_cover_position(self):
         """Return current position"""
         if self._support_position:
-            if self._position == 0:
+            if self._position is None or self._position == 0:
                 return 0
             elif self._position <= self._offset:
                 return 1

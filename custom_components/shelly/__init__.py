@@ -28,7 +28,7 @@ from homeassistant.util import slugify, dt as dt_util
 from .const import *
 from .configuration_schema import CONFIG_SCHEMA
 
-REQUIREMENTS = ['pyShelly==0.1.19']
+REQUIREMENTS = ['pyShellyEx==0.1.2']
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -20,6 +20,7 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_UPGRADE_SWITCH): cv.boolean,
     vol.Optional(CONF_UNAVALABLE_AFTER_SEC): cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
+    vol.Optional(CONF_COVER_OFFSET): cv.positive_int,
 })
 
 CONFIG_SCHEMA = vol.Schema({
@@ -64,6 +65,5 @@ CONFIG_SCHEMA = vol.Schema({
             vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_MDNS, default=DEFAULT_MDNS): cv.boolean,
         vol.Optional(CONF_HOST_IP, default=''): cv.string,
-        vol.Optional(CONF_COVER_OFFSET): cv.positive_int,
     })
 }, extra=vol.ALLOW_EXTRA)
