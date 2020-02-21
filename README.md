@@ -1,15 +1,25 @@
 # Shelly smart home platform for HASS and HASSIO
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
-[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20me%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
+[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/latest_version-0.1.0-green.svg?style=for-the-badge)
+![version-wip](https://img.shields.io/badge/latest_version-0.1.6-green.svg?style=for-the-badge)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
+## Join Facebook group:
+This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
+[https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
+
+## Support the development
+We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
+
+## Intro
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
+
+If you have any problems please see the [Trouble shootning guide](https://github.com/StyraHem/ShellyForHASS/blob/master/troubleshooting.md)
 
 ## Features
 
@@ -31,11 +41,15 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Discovery can be turned off (0.0.4)
 - Switch for firmware update trigger (use with monster-card to show a list of devices to need to be update, see examples below)
 - Support proxy to allow Shelly devices in other LANs (0.0.15).
+- Using mDns discovery and polling if CoAP not working (slower status updates) (0.1.5)
+- Receive device names from Shelly Cloud (cloud_auth_key/cloud_server) (0.1.5)
+- Add Shelly devices by IP-address if on different LAN or mDns and CoAP not working for discovery
 
 ## Devices supported
 
 - Shelly 1
-- Shelly 1 PM (no power meter, firmware bug)
+- Shelly 1 PM
+- Temperature addon for Shelly 1(PM)
 - Shelly 2 (relay or roller mode)
 - Shelly 2.5 (relay or roller mode)
 - Shelly 4
@@ -45,11 +59,12 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 - Shelly Plug
 - Shelly Plug S
 - Shelly RGBWW
-- Shelly RGBW2
+- Shelly RGBW2 (rgb or 4 channels)
 - Shelly 2LED (not verified)
 - Shelly Flood
-- Shelly Dimmer
-- Shelly EM (comming soon)
+- Shelly Door/Window
+- Shelly Dimmer / Dimmer SL
+- Shelly EM
 
 ## Installation
 
@@ -57,17 +72,10 @@ This platform adds components for Shelly smart home devices to Home Assistant. T
 
 Do you you have [HACS](https://community.home-assistant.io/t/custom-component-hacs) installed? Just search for Shelly and install it direct from HACS. HACS will keep track of updates and you can easly upgrade Shelly to latest version.
 
-### Install with Custom Updater (deprecated)
-_We recomend you use HACS as Customer Updater is deprecated._
-
-Do you you have [Custom updater](https://github.com/custom-components/custom_updater) installed? Then you can use the service [custom_updater.install](https://github.com/custom-components/custom_updater/wiki/Services#install-element-cardcomponentpython_script) with the parameter {"element":"shelly"} to install Shelly.
-
-Custom updater also let you to upgrade to latest version. We recomend you to use this.
-
 ### Install manually
 
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
-2. Create another folder `shelly` in the `custom_components` folder. Copy all 5 Python (.py) files from custom_components into the `shelly` folder. Use `raw version` if you copy and paste the files from the browser.
+2. Create another folder `shelly` in the `custom_components` folder. Copy all files from custom_components into the `shelly` folder. Do not copy files from master branch, download latest release (.zip) from [here](https://github.com/StyraHem/ShellyForHASS/releases).
 
 ## Configure
 
@@ -82,6 +90,15 @@ It is very easy, just add `shelly:` to your `configuration.yaml`
 ```yaml
 shelly:
 ```
+
+#### Get device name from Shelly Cloud
+
+```yaml
+shelly:
+  cloud_auth_key: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  cloud_server: "shelly-XXXXX.shelly.cloud"
+```
+You will get the information for the keys above from [Shelly Cloud, User settings](https://my.shelly.cloud/#user_settings) and click GET KEY.
 
 #### Without discovery - manually specify devices
 
@@ -130,6 +147,14 @@ shelly:
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
+#### Discovery by ip
+
+```yaml
+shelly:
+  discover_by_ip:
+    - '192.168.5.44'
+    - '192.168.32.11'
+```
 
 #### Events
 
@@ -155,6 +180,7 @@ automation:
 
 | Parameter              | Description                                                                                            | Default | Version |
 |------------------------|--------------------------------------------------------------------------------------------------------|---------|---------|
+| host_ip | Use this to listen on right interface, should be the ip address of Home Assistant | | 0.1.6- |
 | username               | User name to use for restrict login                                                                    |         | 0.0.3-  |
 | password               | Password to use for restrict login                                                                     |         | 0.0.3-  |
 | discovery              | Enable or disable discovery                                                                            | True    | 0.0.4-  |
@@ -164,13 +190,19 @@ automation:
 | id_prefix              | Change the prefix of the entity id and unique id of the device                                         | shelly  | 0.0.5-  |
 | igmp_fix               | Enable sending out IP_ADD_MEMBERSHIP every minute                                                      | False   | 0.0.5-  |
 | additional_information | Retrieve additional information (rssi, ssid, uptime, ..)                                               | True    | 0.0.6-  |
-| scan_interval          | Update frequency for additional information                                                            | 60      | 0.0.6-  |
+| scan_interval          | Update frequency for polling status and additional information. If the not CoAP supported this will be the delay for status updates. | 60      | 0.0.6-  |
 | _wifi_sensor_          | Add extra sensor for wifi signal of each device. Requires `additional_information` to be `True`.  | False   | 0.0.6 (deprecated) |
 | _uptime_sensor_        | Add extra sensor for device uptime of each devivce. Requires `additional_information` to be `True` | False   | 0.0.6 (deprecated)  |
 | power_decimals         | Round power sensor values to the given number of decimals                                          |         | 0.0.14- |
-| sensors                | A list with sensors to show for each device. See list below.                                        | power | 0.0.15- |
+| sensors                | A list with sensors to show for each device. See list below.                                        | current_consumption | 0.0.15- |
+| attributes             | A list with attributes to show for each device. See list below.                                        | default | 0.0.16- |
 | upgrade_switch         | Add firmware switches when upgrade needed.                                                           | True  | 0.0.15- |
 | unavailable_after_sec  | Number of seconds before the device will be unavialable      | 60 | 0.0.16- |
+| mdns | Allow the plugin to use mDns to discover devices | True | 0.1.5- |
+| cloud_auth_key | Use this to allow the plugin to connect to your Shelly Cloud. You will find this information at https://my.shelly.cloud/#user_settings and GET KEY | | 0.1.5- |
+| cloud_server | Use this togheter with cloud_auth_key | | 0.1.5- |
+| tmpl_name | Template how to create the friendly name from Shelly Cloud | {room} - {name} | 0.1.5- |
+| discover_by_ip | This is a list of ip-addresses to force the plugin to discover. Use this if not CoAP or mDns discovery working for your device. | | 0.1.5- |
 
 #### Device configuration
 
@@ -184,11 +216,39 @@ automation:
 | upgrade_switch | Add firmware switches when upgrade needed. Override global configuration.               | False    | 0.0.15- |
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
+#### Attributes (0.1.6-)
+| Sensor       | Description                                               | Default |
+|--------------|-----------------------------------------------------------|---------|
+| all          | Show all available attributes                             ||
+| default      | Attributes with the mark in default column                ||
+| ip_address   | IP address of the Shelly device                       | x |
+| shelly_type  | Type of Shelly (Shelly 1, Shelly 2 etc)               | x |
+| shelly_id    | Shelly id of the device, 6 or 12 digits hex number    | x |
+| ssid         | SSID the device is connected to                       ||
+| rssi         | WiFi quality for the device  ||
+| uptime       | Total uptime (s) for device ||
+| has_firmware_update | Indicate if the device have a new firmware available | x |
+| latest_fw_version | The newest firmware for the device type ||
+| firmware_version | Current firmware version on device ||
+| cloud_enabled | Shelly cloud enabled for device ||
+| cloud_connected | Device connected to the cloud ||
+| cloud_status | Shelly cloud status (disabled/disconnected/connected) | x |
+| mqtt_connected | Device connected to MQTT server ||
+| switch       | Show state of the actual switch button | x |
+| current_consumption | Show power consumtion sensors     ||
+| total_consumption | Show total power consumtion sensors ||
+| over_power   | Show over power sensors               | x |
+| device_temp  | Show device inner temperature sensors ||
+| over_temp    | Show over temperature sensors         | x |
+| battery      | Show battery percentage               | x |
+| payload | Show the latest CoAP message received (DEBUG) ||
+
 #### Sensors
 | Sensor       | Description                           | Values / Unit     |
 |--------------|---------------------------------------|-------------------|
 | all          | Show all available sensors            |                   |
-| power        | Show power consumtion sensors         | W                 |
+| current_consumption | Show power consumtion sensors     | W              |
+| total_consumption | Show total power consumtion sensors | Wh             |
 | rssi         | Show WiFi quality sensors             | dB                |
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
@@ -199,7 +259,7 @@ automation:
 | battery      | Show battery percentage (H&T)         | %                 |
 | switch       | Show state of the actual switch button| True, False       |
 
-All of the sensors (not power) require additional_information to be True to work.
+All of the sensors (not current_consumption) require additional_information to be True to work.
 
 If you disable discovery only Shellies under devices will be added.
 
@@ -235,8 +295,8 @@ If you running Shellies on different VLAN or network there is a [proxy.py](https
 
 Update the script with the ip-address of your HASS installation and run it on a computer/router etc that are connected to same nettwork as your Shellies. Firewall and routing must be enabled, TCP 80 HASS -> Shelly and UDP 5683 Shelly -> HASS.
 
-## Monster card
-You can use the component with [monstercard](https://github.com/custom-cards/monster-card) to present data in a nice way.
+## Auto entities (before Monster card)
+You can use the component with [auto entities](https://github.com/thomasloven/lovelace-auto-entities) to filter data in a nice way.
 
 ### All shelly devices
 ```yaml
@@ -251,7 +311,7 @@ filter:
     - entity_id: '*firmware*'
   include:
     - entity_id: '*shelly*'
-type: 'custom:monster-card'
+type: 'custom:auto-entities'
 ```
 
 ### Need firmware update (click on the switch to update)
@@ -263,7 +323,7 @@ card:
 filter:
   include:
     - entity_id: '*firmware_update*'
-type: 'custom:monster-card'
+type: 'custom:auto-entities'
 ```
 
 ### WiFi signal of all devices (rssi)
@@ -275,7 +335,7 @@ card:
 filter:
   include:
     - entity_id: '*rssi*'
-type: 'custom:monster-card'
+type: 'custom:auto-entities'
 ```
 
 ## Feedback
