@@ -45,13 +45,13 @@ DEVICE_SCHEMA = vol.Schema({
     vol.Optional(CONF_UNAVALABLE_AFTER_SEC): cv.positive_int,
     vol.Optional(CONF_ENTITY_ID): cv.string,
     vol.Optional(CONF_POWER_DECIMALS): cv.positive_int, #deprecated
-    vol.Optional(CONF_SETTINGS, default={}): SETTINGS_SCHEMA
+    vol.Optional(CONF_SETTINGS, default={}): SETTINGS_SCHEMA,
+    vol.Optional(CONF_COVER_OFFSET): cv.positive_int,
 })
 
 STEP_SCHEMA = vol.Schema({
     vol.Optional(CONF_OBJECT_ID_PREFIX,
-                 default=DEFAULT_OBJECT_ID_PREFIX): str,
-    vol.Optional(CONF_COVER_OFFSET): cv.positive_int,
+                 default=DEFAULT_OBJECT_ID_PREFIX): str
 })
 
 CONFIG_SCHEMA_ROOT = vol.Schema({
