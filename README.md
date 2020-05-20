@@ -3,8 +3,9 @@
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
 [![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?style=for-the-badge)
 ![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![version-wip](https://img.shields.io/badge/latest_version-0.1.6-green.svg?style=for-the-badge)
+![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 ## Join Facebook group:
@@ -12,14 +13,14 @@ This Facebook group are used to anounce new releases etc. Please join it to be u
 [https://www.facebook.com/groups/shellyforhass/](https://www.facebook.com/groups/shellyforhass/)
 
 ## Support the development
-We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patereon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
+We spending lots of effort to make this plugin better and supporting new devices. Please support us by joining on [Patreon](https://www.patreon.com/shelly4hass) or buying us [some cups of coffee](https://www.buymeacoffee.com/styrahem).
 
 ## Intro
 This platform adds components for Shelly smart home devices to Home Assistant. There is no configuration needed, it will find all devices on your LAN and add them to Home Assistant. All communication with Shelly devices is local. You can use this plugin and continue to use Shelly Cloud, MQTT and Shelly app in your mobile if you want. A proxy can also be used to include Shellies on different LAN's.
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/images/intro.png)
 
-If you have any problems please see the [Trouble shootning guide](https://github.com/StyraHem/ShellyForHASS/blob/master/troubleshooting.md)
+If you have any problems please see the [troubleshooting guide](https://github.com/StyraHem/ShellyForHASS/blob/master/troubleshooting.md)
 
 ## Features
 
@@ -65,6 +66,9 @@ If you have any problems please see the [Trouble shootning guide](https://github
 - Shelly Door/Window
 - Shelly Dimmer / Dimmer SL
 - Shelly EM
+- Shelly 3EM (0.1.7)
+- Shelly DUO (0.1.7)
+- Shelly Vintage (0.1.8)
 
 ## Installation
 
@@ -77,21 +81,33 @@ Do you you have [HACS](https://community.home-assistant.io/t/custom-component-ha
 1. Install this platform by creating a `custom_components` folder in the same folder as your configuration.yaml, if it doesn't already exist.
 2. Create another folder `shelly` in the `custom_components` folder. Copy all files from custom_components into the `shelly` folder. Do not copy files from master branch, download latest release (.zip) from [here](https://github.com/StyraHem/ShellyForHASS/releases).
 
-## Configure
+## Setup
+
+You can setup this component by using HA integration or config.yaml. Most of settings is available from integration but things like decimals, device specific configuration is only available when using config.yaml.
+
+If you have the configuration in config.yaml you can convert it to internal setting by clicking the settings gear for the integration and follow the instructions. If you use advanced settings they will be lost. After conversion the settings in config.yaml will be ignored. To go back to config.yaml just delete the integration and restart HA.
+
+### HA Integration
+
+When you have installed Shelly you can add it in GUI under HA integration. Use the plus buttan and search for Shelly. You need to specify the prefix that is used as first part of the entity_id to avoid conflicts. Default is shelly.
+
+When you have added Shelly to HA you can do the configuration by clicking the settings gear for this integration.
+
+### Configure in config.yaml
 
 When you have installed shelly and make sure it exists under `custom_components` folder it is time to configure it in Home Assistant.
 
 It is very easy, just add `shelly:` to your `configuration.yaml`
 
-### Examples
+#### Examples
 
-#### Default with discovery and power sensors
+##### Default with discovery and power sensors
 
 ```yaml
 shelly:
 ```
 
-#### Get device name from Shelly Cloud
+##### Get device name from Shelly Cloud
 
 ```yaml
 shelly:
@@ -100,7 +116,7 @@ shelly:
 ```
 You will get the information for the keys above from [Shelly Cloud, User settings](https://my.shelly.cloud/#user_settings) and click GET KEY.
 
-#### Without discovery - manually specify devices
+##### Without discovery - manually specify devices
 
 ```yaml
 shelly:
@@ -118,7 +134,7 @@ shelly:
          - device_temp
 ```
 
-#### With discovery - adjust some devices
+##### With discovery - adjust some devices
 
 ```yaml
 shelly:
@@ -134,7 +150,7 @@ shelly:
       name: My cool plug #set friendly name
 ```
 
-#### Sensor, global and per device
+##### Sensor, global and per device
 
 ```yaml
 shelly:
@@ -147,7 +163,7 @@ shelly:
     - id: "7BD5F3"
       name: My cool plug #set friendly name
 ```
-#### Discovery by ip
+##### Discovery by ip
 
 ```yaml
 shelly:
@@ -156,7 +172,7 @@ shelly:
     - '192.168.32.11'
 ```
 
-#### Events
+##### Events
 
 ```yaml
 automation:
@@ -167,6 +183,13 @@ automation:
       event_data:
         click_cnt: 2
         state: True
+  - alias: "Shelly single click (momentary) on a specific switch"
+    trigger:
+      platform: event
+      event_type: shelly_switch_click
+      event_data:
+        entity_id: sensor.shelly_shsw_1_XXXXXX_switch
+        click_cnt: 2        
   - alias: "Shelly double click (momentary) on a specific switch"
     trigger:
       platform: event
@@ -175,8 +198,19 @@ automation:
         entity_id: sensor.shelly_shsw_1_XXXXXX_switch
         click_cnt: 4        
 ```
+##### Decimal and unit settings
+```yaml
+shelly:
+  settings:
+    temperature: { decimals: 1 }
+    current: { decimals:0, div:1000, unit:'mA' }  #Show current as mA
+  devices:
+    - id: 123456
+      settings:
+        total_consumption: { decimals: 3, div:1000000, unit:'MWh' }   #Show MWh for a specific device
+```
 
-### Parameters
+#### Parameters
 
 | Parameter              | Description                                                                                            | Default | Version |
 |------------------------|--------------------------------------------------------------------------------------------------------|---------|---------|
@@ -217,8 +251,8 @@ automation:
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Attributes (0.1.6-)
-| Sensor       | Description                                               | Default |
-|--------------|-----------------------------------------------------------|---------|
+| Sensor       | Description                                               | Default | Version |
+|--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
 | default      | Attributes with the mark in default column                ||
 | ip_address   | IP address of the Shelly device                       | x |
@@ -235,8 +269,12 @@ automation:
 | cloud_status | Shelly cloud status (disabled/disconnected/connected) | x |
 | mqtt_connected | Device connected to MQTT server ||
 | switch       | Show state of the actual switch button | x |
-| current_consumption | Show power consumtion sensors     ||
-| total_consumption | Show total power consumtion sensors ||
+| current_consumption | Show power consumtion  ||
+| total_consumption | Show total power consumtion  ||
+| total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
+| voltage | Show current voltage (V) ||0.1.7-|
+| current | Show current current (A) ||0.1.7-|
+| power_factor | Show current power factor ||0.1.7-|
 | over_power   | Show over power sensors               | x |
 | device_temp  | Show device inner temperature sensors ||
 | over_temp    | Show over temperature sensors         | x |
@@ -244,8 +282,8 @@ automation:
 | payload | Show the latest CoAP message received (DEBUG) ||
 
 #### Sensors
-| Sensor       | Description                           | Values / Unit     |
-|--------------|---------------------------------------|-------------------|
+| Sensor       | Description                           | Values / Unit     | Version |
+|--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
 | current_consumption | Show power consumtion sensors     | W              |
 | total_consumption | Show total power consumtion sensors | Wh             |
@@ -258,14 +296,35 @@ automation:
 | mqtt         | Show mqtt connection state            | True, False       |
 | battery      | Show battery percentage (H&T)         | %                 |
 | switch       | Show state of the actual switch button| True, False       |
+| total_returned | Show total power returned  (EM/3EM) ||0.1.7-|
+| voltage | Show current voltage |V|0.1.7-|
+| current | Show current current |A|0.1.7-|
+| power_factor | Show current power factor ||0.1.7-|
 
 All of the sensors (not current_consumption) require additional_information to be True to work.
+
+#### Types (decimal, units) and default settings (0.1.7)
+| value | unit | decimals | divider |
+--------|-----|-----------|---------|
+| temperature | °C | 0 |    |
+| device_temp | °C | 0 |    |
+| illuminance | lux | 0 |    |
+| humidity | % | 0 |    |
+| total_consumption | kWh | 2 |  1000 |
+| total_returned | kWh | 2 |  1000  |
+| current_consumption | W | 0 |    |
+| current | A | 1 |    |
+| humidity | % | 0 |    |
+| voltage | V | 0 | |
+| power_factor | | 1 |
+| uptime | h | 0 | 3600 |
+| rssi | dB | 0 |  |
 
 If you disable discovery only Shellies under devices will be added.
 
 You can only specify one username and password for restrict login. If you enter username and password, access to devices without restrict login will continue to work. Different logins to different devices will be added later.
 
-### Events 
+### Events
 [Events added in release 0.0.16]
 #### shelly_switch_click
 When the switch sensor is enabled an event will be sent for multiple clicks on the switch button. This can be used to trig automations for double clicks etc.
@@ -352,7 +411,7 @@ This plugin is created by the StyraHem.se, the Swedish distributor of Shelly. In
 - [@tefinger](https://github.com/tefinger) that have test and add functinallity to improve this component.
 - Allterco that have developed all nice Shellies and also response quickly on requests and bugfixes.
 
-## Screen shots
+## Screenshots
 
 ![List](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/screenshots/List.PNG)
 ![RGB](https://raw.githubusercontent.com/StyraHem/ShellyForHASS/master/screenshots/RGB.PNG)

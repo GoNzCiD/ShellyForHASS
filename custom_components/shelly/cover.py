@@ -11,7 +11,7 @@ from homeassistant.components.cover import (ATTR_POSITION,
                                             SUPPORT_OPEN, SUPPORT_STOP,
                                             SUPPORT_SET_POSITION)
 
-from . import ShellyDevice
+from .device import ShellyDevice
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
 #def setup_platform(hass, _config, add_devices, discovery_info=None):
@@ -71,13 +71,7 @@ class ShellyCover(ShellyDevice, CoverDevice):
         if self._support_position:
             return self._position == 0
 
-        if self._last_direction == "close":
-            return True
-
-        if self._last_direction == "open":
-            return False
-
-        return False
+        return None
 
     @property
     def is_closing(self):
