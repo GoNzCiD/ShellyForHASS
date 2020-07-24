@@ -45,6 +45,7 @@ CONF_DECIMALS = 'decimals'
 CONF_DIV = 'div'
 CONF_UNIT = 'unit'
 CONF_COVER_OFFSET = 'cover_offset'
+CONF_MQTT_PORT = 'mqtt_port'
 
 CONF_WIFI_SENSOR = 'wifi_sensor' #deprecated
 CONF_UPTIME_SENSOR = 'uptime_sensor' #deprecated
@@ -71,6 +72,10 @@ DEFAULT_SETTINGS = \
     'power_factor' : {CONF_DECIMALS:1},
     'uptime': {CONF_DIV:3600, CONF_UNIT:'h'},
     'rssi': {CONF_UNIT:'dB'},
+    'tilt': {CONF_UNIT:'°'},
+    'battery': {CONF_UNIT:'%'},
+    'ppm': {CONF_UNIT:'PPM'},
+    'total_work_time': {CONF_DIV:3600, CONF_UNIT:'h'},
 }
 
 SHELLY_DEVICE_ID = 'device_id'
@@ -104,6 +109,15 @@ ATTRIBUTE_VOLTAGE = 'voltage'
 ATTRIBUTE_PAYLOAD = 'payload'
 ATTRIBUTE_CURRENT = 'current'
 ATTRIBUTE_POWER_FACTOR = 'power_factor'
+ATTRIBUTE_CLICK_TYPE = 'click_type'
+ATTRIBUTE_CLICK_CNT = 'click_count'
+ATTRIBUTE_TILT = 'tilt'
+ATTRIBUTE_VIBRATION = 'vibration'
+ATTRIBUTE_TEMPERATURE = 'temperature'
+ATTRIBUTE_ILLUMINANCE = 'illuminance'
+ATTRIBUTE_PPM = 'ppm'
+ATTRIBUTE_SENSOR = 'sensor'
+ATTRIBUTE_TOTAL_WORK_TIME = 'total_work_time'
 
 ALL_ATTRIBUTES = {
     ATTRIBUTE_IP_ADDRESS,
@@ -127,7 +141,16 @@ ALL_ATTRIBUTES = {
     ATTRIBUTE_OVER_TEMP,
     ATTRIBUTE_BATTERY,
     ATTRIBUTE_CURRENT,
-    ATTRIBUTE_POWER_FACTOR
+    ATTRIBUTE_POWER_FACTOR,
+    ATTRIBUTE_CLICK_CNT,
+    ATTRIBUTE_CLICK_TYPE,
+    ATTRIBUTE_TILT,
+    ATTRIBUTE_VIBRATION,
+    ATTRIBUTE_TEMPERATURE,
+    ATTRIBUTE_ILLUMINANCE,
+    ATTRIBUTE_PPM,
+    ATTRIBUTE_SENSOR,
+    ATTRIBUTE_TOTAL_WORK_TIME
 }
 
 EXTRA_ATTRIBUTES = {
@@ -150,7 +173,16 @@ DEFAULT_ATTRIBUTES = {
     ATTRIBUTE_OVER_TEMP,
     #ATTRIBUTE_TOTAL_CONSUMPTION,
     #ATTRIBUTE_VOLTAGE,
-    ATTRIBUTE_BATTERY
+    ATTRIBUTE_BATTERY,
+    ATTRIBUTE_CLICK_CNT,
+    ATTRIBUTE_CLICK_TYPE,
+    ATTRIBUTE_TILT,
+    ATTRIBUTE_VIBRATION,
+    ATTRIBUTE_TEMPERATURE,
+    ATTRIBUTE_ILLUMINANCE,
+    ATTRIBUTE_PPM,
+    ATTRIBUTE_SENSOR,
+    ATTRIBUTE_TOTAL_WORK_TIME
 }
 
 SENSOR_ALL = 'all'
@@ -171,6 +203,13 @@ SENSOR_CLOUD = 'cloud'
 SENSOR_MQTT = 'mqtt'
 SENSOR_BATTERY = 'battery'
 SENSOR_SWITCH = 'switch'
+SENSOR_CLICK_TYPE = 'click_type'
+SENSOR_TILT = 'tilt'
+SENSOR_VIBRATION = 'vibration'
+SENSOR_TEMPERATURE = 'temperature'
+SENSOR_ILLUMINANCE = 'illuminance'
+SENSOR_PPM = 'ppm'
+SENSOR_TOTAL_WORK_TIME = 'total_work_time'
 
 ALL_SENSORS = {
     SENSOR_RSSI: {'attr':'rssi'},
@@ -188,6 +227,13 @@ ALL_SENSORS = {
     SENSOR_POWER_FACTOR : {'attr':'power_factor'},
     SENSOR_CURRENT : {'attr':'current'},
     SENSOR_SWITCH : {},
+    SENSOR_CLICK_TYPE : {'attr':'click_type'},
+    SENSOR_TILT : {'attr':'tilt'},
+    SENSOR_VIBRATION  : {'attr':'vibration'},
+    SENSOR_TEMPERATURE : {'attr':'temperature'},
+    SENSOR_ILLUMINANCE : {'attr':'illuminance'},
+    SENSOR_PPM : {'attr':'ppm'},
+    SENSOR_TOTAL_WORK_TIME : {'attr':'total_work_time'}
 }
 
 EXTRA_SENSORS = {
@@ -222,6 +268,11 @@ SENSOR_TYPE_VOLTAGE = 'voltage'
 SENSOR_TYPE_POWER_FACTOR = 'power_factor'
 SENSOR_TYPE_CURRENT = 'current'
 SENSOR_TYPE_DEFAULT = 'default'
+SENSOR_TYPE_CLICK_TYPE = 'click_type'
+SENSOR_TYPE_VIBRATION = 'vibration'
+SENSOR_TYPE_TILT = 'tilt'
+SENSOR_TYPE_PPM = 'ppm'
+SENSOR_TYPE_TOTAL_WORK_TIME = 'total_work_time'
 
 SENSOR_TYPES_CFG = {
     SENSOR_TYPE_DEFAULT:
@@ -266,5 +317,15 @@ SENSOR_TYPES_CFG = {
     SENSOR_TYPE_POWER_FACTOR:
         ['Power factor', None, 'mdi:flash', None, None],
     SENSOR_TYPE_CURRENT:
-        ['Current', 'A', 'mdi:flash', None, None]
+        ['Current', 'A', 'mdi:flash', None, None],
+    SENSOR_TYPE_CLICK_TYPE:
+        ['Click type', '', 'mdi:hockey-puck', None, None],
+    SENSOR_TYPE_TILT:
+        ['Tilt', '', 'mdi:angle-acute', None, None],
+    SENSOR_TYPE_VIBRATION:
+        ['Vibration', '', 'mdi:vibrate', None, 'bool'],
+    SENSOR_TYPE_PPM:
+        ['Concentration', 'PPM', 'mdi:gauge', None, None],
+    SENSOR_TYPE_TOTAL_WORK_TIME:
+        ['Total work time', 's', 'mdi:briefcase-clock', None, None],
 }
