@@ -48,6 +48,7 @@ class ShellyCover(ShellyDevice, CoverEntity):
         self._motion_state = None
         self._support_position = None
         self._state = None
+        self._master_unit = True
         self._offset = 0
         if dev.offset:
             self._offset = dev.offset
@@ -111,6 +112,8 @@ class ShellyCover(ShellyDevice, CoverEntity):
         if pos >= 1:
             pos = pos + ((100 - pos) * self._offset / 100)
         self._dev.set_position(pos)
+        self._position = pos
+        self.schedule_update_ha_state()
 
     def stop_cover(self, **_kwargs):
         """Stop the cover."""

@@ -1,14 +1,16 @@
 # Shelly smart home platform for HASS and HASSIO
 
 [![founder-wip](https://img.shields.io/badge/founder-Håkan_Åkerberg@StyraHem.se-green.svg?style=for-the-badge)](https://www.styrahem.se)
-[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
+[![buy me a coffee](https://img.shields.io/badge/If%20you%20like%20it-Buy%20us%20a%20coffee-green.svg?style=for-the-badge)](https://www.buymeacoffee.com/styrahem)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-green.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
-![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-yellow.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+![Github All Releases](https://img.shields.io/github/downloads/styrahem/shellyforhass/total.svg?label=Total%20downloads&style=for-the-badge&color=yellow)
+![GitHub release (beta)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20beta&style=for-the-badge&include_prereleases&color=lightgray)
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/StyraHem/ShellyForHass?label=Latest%20release&style=for-the-badge)
-![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge)
-![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge)
+![stability-wip](https://img.shields.io/badge/stability-stable-green.svg?style=for-the-badge&color=blue)
+![GitHub Releases](https://img.shields.io/github/downloads/StyraHem/ShellyForHass/latest/total?label=Downloads&style=for-the-badge&color=blue)
+
 
 ## Join Facebook group:
 This Facebook group are used to anounce new releases etc. Please join it to be updated of new releases.
@@ -258,7 +260,7 @@ shelly:
 | unavailable_after_sec  | Overide number of seconds before the device will be unavialable.    | 120 | 0.0.16- | 
 
 #### Attributes (0.1.6-)
-| Sensor       | Description                                               | Default | Version |
+| Parameter    | Description                                               | Default | Version |
 |--------------|-----------------------------------------------------------|---------|---------|
 | all          | Show all available attributes                             ||
 | default      | Attributes with the mark in default column                ||
@@ -289,7 +291,7 @@ shelly:
 | payload | Show the latest CoAP message received (DEBUG) ||
 
 #### Sensors
-| Sensor       | Description                           | Values / Unit     | Version |
+| Parameter    | Description                           | Values / Unit     | Version |
 |--------------|---------------------------------------|-------------------|---------|
 | all          | Show all available sensors            |                   |
 | current_consumption | Show power consumtion sensors     | W              |
@@ -298,6 +300,8 @@ shelly:
 | uptime       | Show uptime sensors                   | s                 |
 | over_power   | Show over power sensors               | True, False       |
 | device_temp  | Show device inner temperature sensors | °C                |
+| illuminance  | Show illuminance sensors              | lux               |
+| vibration    | Show vibration   sensors              | True, False       |
 | over_temp    | Show over temperature sensors         | True, False       |
 | cloud        | Show cloud status                     | disabled, disconnected, connected |
 | mqtt         | Show mqtt connection state            | True, False       |
@@ -315,7 +319,7 @@ All of the sensors (not current_consumption) require additional_information to b
 --------|-----|-----------|---------|
 | temperature | °C | 0 |    |
 | device_temp | °C | 0 |    |
-| illuminance | lux | 0 |    |
+| illuminance | lx | 0 |    |
 | humidity | % | 0 |    |
 | total_consumption | kWh | 2 |  1000 |
 | total_returned | kWh | 2 |  1000  |
